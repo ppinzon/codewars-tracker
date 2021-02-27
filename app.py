@@ -16,7 +16,7 @@ class Honor(db.Model):
     
     _id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     honor = db.Column(db.Integer, nullable=False)
-    timestamp = db.Colum(db.DateTime, nullable=False)
+    timestamp = db.Column(db.DateTime, nullable=False)
     
     def __init__(self, honor, timestamp):
         self.honor = honor
