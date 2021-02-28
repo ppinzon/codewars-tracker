@@ -28,8 +28,8 @@ def respond():
     if request.headers.get('X-Webhook-Secret') == code_secret:
         data = request.json
         action = data['action']
-        fields = data["user"]
         if action == "honor_changed":
+            fields = data["user"]
             print("honor change request recieved")
             honor = fields["honor"]
             new_data = Honor(honor, timestamp())
