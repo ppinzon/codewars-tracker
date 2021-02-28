@@ -24,16 +24,19 @@ class Honor(db.Model):
 
 @app.route('/codewars', methods=['POST'])
 def respond():
-    data = request.json
-    action = data['action']
-    fields = data["user"]
-    if action == "honor_changed":
-        print("honor change request recieved")
-        honor = fields["honor"]
-        new_data = Honor(honor, timestamp())
-        db.session.add(new_data)
-        db.session.commit()
-    return Response(status=200)
+    print(request.headers)
+    if request.headers.get('X-Webhook-Secret')== "pizza":
+        data = request.json
+        action = data['action']
+        fields = data["user"]
+        if action == "honor_changed":
+            print("honor change request recieved")
+            honor = fields["honor"]
+            new_data = Honor(honor, timestamp())
+            db.session.add(new_data)
+            db.session.commit()
+        return Response(status=200)
+    return Response(status=403)
 
 
 def timestamp():
