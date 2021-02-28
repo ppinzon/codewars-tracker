@@ -22,22 +22,19 @@ class Honor(db.Model):
         self.honor = honor
         self.timestamp = timestamp
 
-@app.route('/webhook', methods=['POST'])
+@app.route('/codewars', methods=['POST'])
 def respond():
     data = request.json
-    print("recieved")
     action = data['action']
     fields = data["user"]
     if action == "honor_changed":
+        print("honor change request recieved")
         honor = fields["honor"]
         new_data = Honor(honor, timestamp())
         db.session.add(new_data)
         db.session.commit()
-        # write_db(query)
     return Response(status=200)
 
 
 def timestamp():
-    now = datetime.now()
-    # return now.strftime("%Y-%m-%d %H:%M:%S+00")
-    return now
+    return datetime.now()
