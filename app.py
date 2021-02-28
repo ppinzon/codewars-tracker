@@ -8,6 +8,7 @@ app = Flask(__name__)
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+code_secret = os.environ['CODEWARS_SECRET']
 
 db = SQLAlchemy(app)
 
@@ -24,8 +25,7 @@ class Honor(db.Model):
 
 @app.route('/codewars', methods=['POST'])
 def respond():
-    print(request.headers)
-    if request.headers.get('X-Webhook-Secret')== "pizza":
+    if request.headers.get('X-Webhook-Secret') == code_secret:
         data = request.json
         action = data['action']
         fields = data["user"]
@@ -35,7 +35,8 @@ def respond():
             new_data = Honor(honor, timestamp())
             db.session.add(new_data)
             db.session.commit()
-        return Response(status=200)
+            return Response(status=200)
+        return Response(status=404)
     return Response(status=403)
 
 
